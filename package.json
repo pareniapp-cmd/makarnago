@@ -1,0 +1,18 @@
+{
+  "name": "makarna-kacis",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Makarna Kaçış - iOS kabuğu (Capacitor)",
+  "scripts": {
+    "sync": "cap sync ios",
+    "open": "cap open ios"
+  },
+  "dependencies": {
+    "@capacitor/core": "latest",
+    "@capacitor/ios": "latest",
+    "@capacitor/haptics": "latest"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "latest"
+  }
+}

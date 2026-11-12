@@ -1,0 +1,10 @@
+{
+  "appId": "com.makarnago.app",
+  "appName": "Makarna Kaçış",
+  "webDir": "www",
+  "ios": {
+    "contentInset": "always",
+    "preferredContentMode": "mobile"
+  },
+  "backgroundColor": "#123a45"
+}

@@ -1,0 +1,44 @@
+# Makarna Kaçış: Codemagic ile iOS derlemesi (Mac gerekmez)
+# Kullanmadan önce CODEMAGIC-REHBERI.md dosyasını oku.
+workflows:
+  ios-release:
+    name: Makarna Kaçış iOS
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    integrations:
+      # Codemagic'te Developer Portal entegrasyonuna verdiğin API anahtarı adı
+      app_store_connect: codemagic
+    environment:
+      xcode: latest        # App Store için Xcode 26 ve üstü şart
+      node: latest
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.makarnago.app
+      vars:
+        BUNDLE_ID: "com.makarnago.app"
+    scripts:
+      - name: Bağımlılıkları kur
+        script: npm install
+      - name: iOS projesini üret ve ayarla
+        script: |
+          npx cap add ios
+          sh scripts/ios-setup.sh
+          ruby scripts/localize-name.rb || echo "Ana ekran adı yerelleştirmesi atlandı (derleme etkilenmez)"
+          npx cap sync ios
+      - name: İmzalama ayarlarını uygula
+        script: xcode-project use-profiles
+      - name: IPA derle
+        script: |
+          if [ -d ios/App/App.xcworkspace ]; then
+            xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
+          else
+            xcode-project build-ipa --project ios/App/App.xcodeproj --scheme App
+          fi
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        # İlk denemelerde false kalsın: yalnızca iç test (kendi TestFlight'ın) için yeterli.
+        submit_to_testflight: false
