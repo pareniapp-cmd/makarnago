@@ -4,9 +4,6 @@ workflows:
     name: Makarna Kaçış iOS
     instance_type: mac_mini_m2
     max_build_duration: 60
-    integrations:
-      # Codemagic'te Developer Portal entegrasyonuna verdiğin API anahtarı adı
-      app_store_connect: codemagic
     environment:
       xcode: latest
       node: latest
@@ -89,5 +86,8 @@ workflows:
       - /tmp/xcodebuild_logs/*.log
     publishing:
       app_store_connect:
-        auth: integration
+        # Apple API anahtarı, Codemagic'te Environment variables olarak girilen üç değerden okunur
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
         submit_to_testflight: false
