@@ -1,5 +1,4 @@
 # Makarna Kaçış: Codemagic ile iOS derlemesi (Mac gerekmez)
-# Kullanmadan önce CODEMAGIC-REHBERI.md dosyasını oku.
 workflows:
   ios-release:
     name: Makarna Kaçış iOS
@@ -9,7 +8,7 @@ workflows:
       # Codemagic'te Developer Portal entegrasyonuna verdiğin API anahtarı adı
       app_store_connect: codemagic
     environment:
-      xcode: latest        # App Store için Xcode 26 ve üstü şart
+      xcode: latest
       node: latest
       ios_signing:
         distribution_type: app_store
@@ -21,10 +20,58 @@ workflows:
         script: npm install
       - name: iOS projesini üret ve ayarla
         script: |
+          set -e
           npx cap add ios
-          sh scripts/ios-setup.sh
-          ruby scripts/localize-name.rb || echo "Ana ekran adı yerelleştirmesi atlandı (derleme etkilenmez)"
-          npx cap sync ios
+          APP=ios/App
+          PLIST=$APP/App/Info.plist
+          PB=/usr/libexec/PlistBuddy
+          $PB -c "Set :CFBundleDisplayName Pasta Escape" "$PLIST" 2>/dev/null || $PB -c "Add :CFBundleDisplayName string Pasta Escape" "$PLIST"
+          $PB -c "Set :ITSAppUsesNonExemptEncryption false" "$PLIST" 2>/dev/null || $PB -c "Add :ITSAppUsesNonExemptEncryption bool false" "$PLIST"
+          $PB -c "Delete :UISupportedInterfaceOrientations" "$PLIST" 2>/dev/null || true
+          $PB -c "Add :UISupportedInterfaceOrientations array" "$PLIST"
+          $PB -c "Add :UISupportedInterfaceOrientations:0 string UIInterfaceOrientationPortrait" "$PLIST"
+          $PB -c "Delete :UISupportedInterfaceOrientations~ipad" "$PLIST" 2>/dev/null || true
+          $PB -c "Delete :CFBundleLocalizations" "$PLIST" 2>/dev/null || true
+          $PB -c "Add :CFBundleLocalizations array" "$PLIST"
+          i=0
+          for l in en tr es pt-BR ru; do
+            $PB -c "Add :CFBundleLocalizations:$i string $l" "$PLIST"
+            i=$((i+1))
+          done
+          PBX=$APP/App.xcodeproj/project.pbxproj
+          sed -i '' 's/TARGETED_DEVICE_FAMILY = "1,2";/TARGETED_DEVICE_FAMILY = 1;/g' "$PBX"
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*;/CURRENT_PROJECT_VERSION = ${PROJECT_BUILD_NUMBER:-1};/g" "$PBX"
+          sed -i '' 's/MARKETING_VERSION = [0-9.]*;/MARKETING_VERSION = 1.0;/g' "$PBX"
+          for f in "$APP/App/Assets.xcassets/AppIcon.appiconset"/*.png; do cp icon-1024.png "$f"; done
+          echo "ios ayarlari tamam"
+      - name: Ana ekran adını yerelleştir (başarısız olursa atlanır)
+        script: |
+          ruby <<'RUBY' || echo "yerelleştirme atlandı"
+          require 'xcodeproj'
+          require 'fileutils'
+          begin
+            names = { 'en' => 'Pasta Escape', 'tr' => 'Makarna Kaçış', 'es' => 'Fuga de Pasta', 'pt-BR' => 'Fuga da Massa', 'ru' => 'Побег макаронины' }
+            proj = Xcodeproj::Project.open('ios/App/App.xcodeproj')
+            target = proj.targets.find { |t| t.name == 'App' }
+            group = proj.main_group['App'] || proj.main_group.new_group('App', 'App')
+            vg = group.new_variant_group('InfoPlist.strings')
+            names.each do |l, n|
+              dir = "ios/App/App/#{l}.lproj"
+              FileUtils.mkdir_p(dir)
+              File.write("#{dir}/InfoPlist.strings", "\"CFBundleDisplayName\" = \"#{n}\";\n")
+              ref = vg.new_reference("#{l}.lproj/InfoPlist.strings")
+              ref.name = l
+            end
+            target.resources_build_phase.add_file_reference(vg)
+            proj.root_object.known_regions = (proj.root_object.known_regions + names.keys).uniq
+            proj.save
+            puts 'ana ekran adı yerelleştirildi'
+          rescue => e
+            puts "yerelleştirme atlandı: #{e.message}"
+          end
+          RUBY
+      - name: Capacitor eşitle
+        script: npx cap sync ios
       - name: İmzalama ayarlarını uygula
         script: xcode-project use-profiles
       - name: IPA derle
@@ -40,5 +87,4 @@ workflows:
     publishing:
       app_store_connect:
         auth: integration
-        # İlk denemelerde false kalsın: yalnızca iç test (kendi TestFlight'ın) için yeterli.
         submit_to_testflight: false
