@@ -255,7 +255,7 @@ while(mode==="run"&&n++<60000){hold=bot();step(1/120);while(p<xs.length&&hx>=xs[
 SIM=0;SOLVD=0;hold=false;C.rain=r0;si=s0;applyShape();RF=[];
 for(p=0;p<xs.length;p++){var yp=rec[p]!==undefined?rec[p]:H/2,t1=tc[p]!==undefined?tc[p]:tAt(xs[p]),dd=(p%2)?1:-1,span=RV*1.35,tip=dd>0?(yp+RMG+RL):(yp-RMG-span);RF.push({x:xs[p],o:(((tip+300)-RV*(t1-.25))%1500+1500)%1500})}}
 function rfTip(f){return((f.o+t*RV)%1500)-300}
-function build(){G=[];IC=[];GEN={rn:rng(C.seed),c:320,k:0};while(G.length<C.n)addGate();FIN=C.endless?1e9:420+C.n*190+140;zones();if(C.drop)dropPhase();if(C.rain)rainPhase()}
+function build(){G=[];IC=[];GEN={rn:rng(C.seed),c:320,k:0};while(G.length<C.n)addGate();FIN=C.endless?1e9:420+C.n*190+140;zones();RF=[];ba=0;ra=0;if(C.drop)dropPhase();if(C.rain)rainPhase()}
 function tyDrag(){var a=-1,i;for(i=0;i<G.length;i++){if(G[i].x<=hx+10)a=i;else break}if(a<0)return gc(G[0],t+Math.max(0,G[0].x-hx)/spd());var ga=G[a],ca=gc(ga,t);if(a+1>=G.length)return ca;var gb=G[a+1],cb=gc(gb,t+Math.max(0,gb.x-hx)/spd()),w=Math.max(0,Math.min(1,(hx-(ga.x+30))/(gb.x-ga.x-60)));w=w*w*(3-2*w);return ca+(cb-ca)*w}
 function bot(){var gi=G.length,i;for(i=0;i<G.length;i++){if(hx<G[i].x+60){gi=i;break}}var ty=H/2;if(gi<G.length){var g=G[gi];ty=gc(g,t+Math.max(0,g.x-hx)/spd())}if(CTLD)ty=tyDrag();if(C.mb)for(var jb=0;jb<C.mb.length;jb++){var pj=C.mb[jb],oa=CTLD?pj.offd:pj.off,of0=oa&&oa[si];if(!of0)continue;var a0=t-(pj.th-.95);if(a0>0&&t<pj.th+.35){var w0=Math.min(1,a0/.35,(pj.th+.35-t)/.2);ty+=of0*Math.max(0,w0)}}
 if(CTLD){var inv0=(C.inv?1:0)^((C.flip&&(Math.floor(t/3.6)%2))?1:0),vt=typ===null?0:(ty-typ)*120;typ=ty;vty+=(vt-vty)*.15;var tf=ty+(DD/KD)*vty;FY=inv0?H-tf:tf;return true}
