@@ -10,7 +10,8 @@
   "dependencies": {
     "@capacitor/core": "latest",
     "@capacitor/ios": "latest",
-    "@capacitor/haptics": "latest"
+    "@capacitor/haptics": "latest",
+    "@capacitor-community/admob": "latest"
   },
   "devDependencies": {
     "@capacitor/cli": "latest"
