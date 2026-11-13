@@ -118,7 +118,7 @@ try{document.title=LANG==="tr"?"Makarna Kaçış":i18Seg("Makarna Kaçış")}cat
 function setLang(l){if(LANGS.indexOf(l)<0)return;LANG=l;sv.lang=l;save();i18Reset();applyStatic();setChapter(ci);buildSettings()}
 i18Static();
 
-var ADCFG={test:true,ids:{banner:"ca-app-pub-3940256099942544/2934735716",inter:"ca-app-pub-3940256099942544/4411468910",reward:"ca-app-pub-3940256099942544/1712485313"}};
+var ADCFG={test:true,ids:{banner:"ca-app-pub-7339221253347325/6536898771",inter:"ca-app-pub-7339221253347325/6153755396",reward:"ca-app-pub-7339221253347325/6841306050"}};
 var ADS={m:null,ok:false,rr:false,ir:false,bnMade:false,bnOn:false,busy:false,kicked:false,started:false,priv:false,got:false,cb:null,pend:null,chD:0,dSince:0,worst:-1,t0:Date.now(),tInter:0};
 function adPlug(){try{var K=window.Capacitor;if(K&&K.isNativePlatform&&K.isNativePlatform()&&K.Plugins&&K.Plugins.AdMob)return K.Plugins.AdMob}catch(e){}return null}
 function adKick(){if(ADS.kicked)return;ADS.kicked=true;setTimeout(adInit,2500)}
