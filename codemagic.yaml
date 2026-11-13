@@ -11,6 +11,8 @@ workflows:
       node: latest
       vars:
         BUNDLE_ID: "com.makarnago.app"
+        # AdMob Uygulama Kimliği. Şimdilik Google'ın TEST kimliği; gerçek kimlikle değiştirilecek.
+        ADMOB_APP_ID: "ca-app-pub-3940256099942544~1458002511"
     scripts:
       - name: Bağımlılıkları kur
         script: npm install
@@ -34,6 +36,16 @@ workflows:
             $PB -c "Add :CFBundleLocalizations:$i string $l" "$PLIST"
             i=$((i+1))
           done
+          $PB -c "Set :GADApplicationIdentifier $ADMOB_APP_ID" "$PLIST" 2>/dev/null || $PB -c "Add :GADApplicationIdentifier string $ADMOB_APP_ID" "$PLIST"
+          $PB -c "Set :NSUserTrackingUsageDescription This identifier will be used to deliver personalized ads to you." "$PLIST" 2>/dev/null || $PB -c "Add :NSUserTrackingUsageDescription string This identifier will be used to deliver personalized ads to you." "$PLIST"
+          $PB -c "Delete :SKAdNetworkItems" "$PLIST" 2>/dev/null || true
+          $PB -c "Add :SKAdNetworkItems array" "$PLIST"
+          i=0
+          for id in cstr6suwn9 4fzdc2evr5 2fnua5tdw4 ydx93a7ass p78axxw29g v72qych5uu ludvb6z3bs cp8zw746q7 3sh42y64q3 c6k4g5qg8m s39g8k73mm 3qy4746246 f38h382jlk hs6bdukanm v4nxqhlyqp wzmmz9fp6w yclnxrl5pm t38b2kh725 7ug5zh24hu gta9lk7p23 vutu7akeur y5ghdn5j9k n6fk4nfna4 v9wttpbfk9 n38lu8286q 47vhws6wlr kbd757ywx3 9t245vhmpl a2p9lx4jpn 22mmun2rn5 4468km3ulz 2u9pt9hc89 8s468mfl3y klf5c3l5u5 ppxm28t8ap ecpz2srf59 uw77j35x4d pwa73g5rt2 mlmmfzh3r3 578prtvx9j 4dzt52r2t5 e5fvkxwrpn 8c4e2ghe7u zq492l623r 3rd42ekr43 3qcr597p9d; do
+            $PB -c "Add :SKAdNetworkItems:$i dict" "$PLIST"
+            $PB -c "Add :SKAdNetworkItems:$i:SKAdNetworkIdentifier string $id.skadnetwork" "$PLIST"
+            i=$((i+1))
+          done
           PBX=$APP/App.xcodeproj/project.pbxproj
           sed -i '' 's/TARGETED_DEVICE_FAMILY = "1,2";/TARGETED_DEVICE_FAMILY = 1;/g' "$PBX"
           sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*;/CURRENT_PROJECT_VERSION = ${PROJECT_BUILD_NUMBER:-1};/g" "$PBX"
@@ -47,6 +59,7 @@ workflows:
           require 'fileutils'
           begin
             names = { 'en' => 'Pasta Escape', 'tr' => 'Makarna Kaçış', 'es' => 'Fuga de Pasta', 'pt-BR' => 'Fuga da Massa', 'ru' => 'Побег макаронины' }
+            att = { 'en' => 'This identifier will be used to deliver personalized ads to you.', 'tr' => 'Bu kimlik, sana daha uygun reklamlar göstermek için kullanılır.', 'es' => 'Este identificador se usará para mostrarte anuncios personalizados.', 'pt-BR' => 'Este identificador será usado para exibir anúncios personalizados para você.', 'ru' => 'Этот идентификатор будет использоваться для показа персонализированной рекламы.' }
             proj = Xcodeproj::Project.open('ios/App/App.xcodeproj')
             target = proj.targets.find { |t| t.name == 'App' }
             group = proj.main_group['App'] || proj.main_group.new_group('App', 'App')
@@ -54,7 +67,7 @@ workflows:
             names.each do |l, n|
               dir = "ios/App/App/#{l}.lproj"
               FileUtils.mkdir_p(dir)
-              File.write("#{dir}/InfoPlist.strings", "\"CFBundleDisplayName\" = \"#{n}\";\n")
+              File.write("#{dir}/InfoPlist.strings", "\"CFBundleDisplayName\" = \"#{n}\";\n\"NSUserTrackingUsageDescription\" = \"#{att[l]}\";\n")
               ref = vg.new_reference("#{l}.lproj/InfoPlist.strings")
               ref.name = l
             end
