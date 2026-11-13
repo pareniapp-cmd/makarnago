@@ -121,6 +121,13 @@ i18Static();
 var ADCFG={test:true,ids:{banner:"ca-app-pub-7339221253347325/6536898771",inter:"ca-app-pub-7339221253347325/6153755396",reward:"ca-app-pub-7339221253347325/6841306050"}};
 var ADS={m:null,ok:false,rr:false,ir:false,bnMade:false,bnOn:false,busy:false,dbg:[],kicked:false,started:false,priv:false,got:false,cb:null,pend:null,chD:0,dSince:0,worst:-1,t0:Date.now(),tInter:0};
 function adLog(s){ADS.dbg.push(s);if(ADS.dbg.length>14)ADS.dbg.shift()}
+window.__tapLog=[];
+function tapRec(e){try{var x=(e.touches&&e.touches[0]?e.touches[0].clientX:e.clientX),y=(e.touches&&e.touches[0]?e.touches[0].clientY:e.clientY);
+var real=document.elementFromPoint(x,y);var rid=real?(real.id||real.className||real.tagName):"yok";
+var tid=e.target?(e.target.id||e.target.className||e.target.tagName):"yok";
+window.__tapLog.push(Math.round(x)+","+Math.round(y)+" hedef="+tid+" gercek="+rid+" mod="+mode);
+if(window.__tapLog.length>6)window.__tapLog.shift()}catch(err){window.__tapLog.push("hata:"+err.message)}}
+document.addEventListener("pointerdown",tapRec,true);document.addEventListener("touchstart",tapRec,true);
 function adPlug(){try{var K=window.Capacitor;if(!K){adLog("no-Capacitor");return null}if(!(K.isNativePlatform&&K.isNativePlatform())){adLog("not-native");return null}var m=K.registerPlugin?K.registerPlugin("AdMob"):(K.Plugins&&K.Plugins.AdMob);if(!m)adLog("no-AdMob-plugin");return m||null}catch(e){adLog("plug-err:"+(e&&e.message||e))}return null}
 function adEEA(){try{var z=Intl.DateTimeFormat().resolvedOptions().timeZone||"";if(/^Europe\//.test(z)&&!/^Europe\/(Istanbul|Moscow|Minsk|Kyiv|Kiev|Kaliningrad|Samara|Volgograd|Chisinau|Simferopol|Saratov|Astrakhan|Ulyanovsk|Kirov|Tirane|Belgrade|Skopje|Sarajevo|Podgorica)/.test(z))return true;if(/^Atlantic\/(Reykjavik|Madeira|Azores|Canary|Faroe)/.test(z))return true}catch(e){}return false}
 function adKick(){if(ADS.kicked)return;ADS.kicked=true;adLog("kick");setTimeout(adInit,2500)}
@@ -591,6 +598,7 @@ var cb2=document.createElement("button");cb2.className="tg on";cb2.innerHTML="�
 var lg=document.createElement("button");lg.className="tg on";lg.innerHTML="🌐 Dil<b>"+LNAME[LANG]+"</b>";lg.onclick=function(){setLang(LANGS[(LANGS.indexOf(LANG)+1)%LANGS.length])};g.appendChild(lg);
 if(ADCFG.test&&adNative()){var vh=document.createElement("small");vh.style.cssText="display:block;margin:12px 0 4px;opacity:.7;font-size:12px;font-weight:800;color:#fff";vh.textContent="📸 Vitrin (ekran görüntüsü için)";g.appendChild(vh);[["oyun","Oyun"],["firin","Fırın"],["patron","Patron"],["bonus","Bonus odası"],["yagmur","Çatal yağmuru"],["harita","Harita"],["makarna","Makarnalar"],["kostum","Kostümler"],["kart","Paylaşım kartı"]].forEach(function(a){var vb=document.createElement("button");vb.className="tg on";vb.textContent="📸 "+a[1];vb.onclick=function(){vit(a[0])};g.appendChild(vb)});var vx=document.createElement("button");vx.className="tg on";vx.textContent="↩ Vitrinden çık";vx.onclick=vitExit;g.appendChild(vx)}
 if(ADCFG.test&&adNative()){var dg=document.createElement("small");dg.style.cssText="display:block;margin-top:10px;opacity:.55;font-size:11px;word-break:break-all;color:#fff;text-align:left";dg.textContent="ads: "+(ADS.dbg.length?ADS.dbg.join(" › "):"(no events)");g.appendChild(dg)}
+if(ADCFG.test&&adNative()){var tg=document.createElement("small");tg.style.cssText="display:block;margin-top:6px;opacity:.55;font-size:10px;word-break:break-all;color:#0f0;text-align:left";tg.textContent="dokunma: "+(window.__tapLog.length?window.__tapLog.join(" | "):"(henüz yok)");g.appendChild(tg)}
 if(ADS.priv){var pv=document.createElement("button");pv.className="tg on";pv.innerHTML="🔒 Gizlilik seçenekleri";pv.onclick=function(){try{ADS.m.showPrivacyOptionsForm()}catch(e){}};g.appendChild(pv)}
 var rs=document.createElement("button"),armed=0;rs.className="tg danger";rs.innerHTML="🗑️ İlerlemeyi sıfırla<b></b>";rs.onclick=function(){var lb=rs.querySelector("b");if(!armed){armed=1;lb.textContent="Emin misin? Tekrar dokun";setTimeout(function(){armed=0;lb.textContent=""},3000);return}resetAll()};g.appendChild(rs)}
 (function(){var q=function(id,fn){$(id).onclick=fn};
