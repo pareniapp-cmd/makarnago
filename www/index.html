@@ -14,7 +14,7 @@ html,body{height:100%;margin:0}
 *{-webkit-touch-callout:none;box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
 body{background:var(--bg);color:var(--fg);font-family:"Avenir Next","Trebuchet MS",system-ui,sans-serif;overflow:hidden}
 #app{position:relative;height:100%;max-width:480px;margin:0 auto;display:flex;flex-direction:column}
-#hud{display:flex;align-items:center;gap:10px;padding:8px 14px 6px;font-weight:700;font-size:13px}
+#hud{position:relative;z-index:30;display:flex;align-items:center;gap:10px;padding:8px 14px 6px;font-weight:700;font-size:13px}
 #bar{position:relative;flex:1;height:10px;border-radius:6px;background:var(--line);overflow:hidden}
 #fill{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--ac);border-radius:6px}
 #bm{position:absolute;top:0;bottom:0;width:3px;background:var(--fg);left:0}
@@ -51,7 +51,7 @@ canvas{flex:1;min-height:0;width:100%;display:block;touch-action:none}
 #msg{position:absolute;left:10px;right:10px;top:42%;transform:translateY(-50%);text-align:center;pointer-events:none;padding:22px 8px;background:radial-gradient(ellipse at center,rgba(8,14,24,.42),rgba(8,14,24,0) 74%)}
 #msg b{display:block;font-size:30px;line-height:1.15;margin-bottom:8px;color:#fff;text-shadow:0 0 3px rgba(0,0,0,.85),0 2px 10px rgba(0,0,0,.7)}
 #msg span{display:block;font-size:15px;line-height:1.45;color:#fff;text-shadow:0 0 3px rgba(0,0,0,.9),0 1px 8px rgba(0,0,0,.75)}
-#menuBtn{border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:17px;font-weight:800;border-radius:10px;padding:0 10px;height:30px}
+#menuBtn{position:relative;z-index:50;border:1px solid var(--line);background:var(--card);color:var(--fg);font-size:17px;font-weight:800;border-radius:10px;padding:0 10px;height:30px;min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center}#menuBtn::before{content:"";position:absolute;inset:-9px;z-index:1}
 #home .logo{margin-bottom:14px}#home h1{font-size:32px;margin:4px 0 2px}#home .logo p{margin:0;opacity:.8}
 .big{width:100%;padding:16px;border:0;border-radius:14px;background:var(--ac);color:#fff;font:inherit;font-weight:800;font-size:18px;margin-top:10px}.big.sec{background:#35424d}
 .hgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.hgrid button{padding:14px 6px;border:0;border-radius:12px;background:#1d2a33;color:#fff;font:inherit;font-weight:700;font-size:14px}.hgrid button:disabled{opacity:.45}
