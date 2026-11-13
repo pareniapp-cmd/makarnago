@@ -11,8 +11,8 @@ workflows:
       node: latest
       vars:
         BUNDLE_ID: "com.makarnago.app"
-        # AdMob Uygulama Kimliği. Şimdilik Google'ın TEST kimliği; gerçek kimlikle değiştirilecek.
-        ADMOB_APP_ID: "ca-app-pub-3940256099942544~1458002511"
+        # AdMob Uygulama Kimliği (gerçek).
+        ADMOB_APP_ID: "ca-app-pub-7339221253347325~4102307127"
     scripts:
       - name: Bağımlılıkları kur
         script: npm install
