@@ -100,11 +100,12 @@ canvas{flex:1;min-height:0;width:100%;display:block;touch-action:none}
 <div class="modal" id="st"><div class="mbox"><h3>Ayarlar</h3><div id="stg"></div><div class="mrow"><button class="sec mback">← Geri</button></div></div></div>
 <script>
 (function(){
+alert("SPLASH TEST ÇALIŞIYOR");
 var sp=document.createElement("div");
 sp.id="splash";
-sp.style.cssText="position:fixed;top:0;left:0;right:0;bottom:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#0a2228;transition:opacity .45s ease;opacity:1;";
+sp.style.cssText="position:absolute;top:0;left:0;right:0;bottom:0;z-index:999999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#0a2228;transition:opacity .45s ease;opacity:1;";
 sp.innerHTML='<div style="font-size:110px;line-height:1">🍝</div><h1 style="margin:0;font-size:40px;font-weight:900;color:#ffd23f;letter-spacing:-1px;font-family:inherit">MakarnaGo</h1><div style="font-size:12px;font-weight:700;color:#fff;opacity:.6;letter-spacing:.5px;margin-top:2px;font-family:inherit">BMAC\'s</div>';
-(document.body||document.documentElement).appendChild(sp);
+(document.getElementById("app")||document.body||document.documentElement).appendChild(sp);
 setTimeout(function(){sp.style.opacity="0";sp.style.pointerEvents="none";setTimeout(function(){if(sp.parentNode)sp.parentNode.removeChild(sp)},500)},1700);
 })();
 function $(s){return document.querySelector(s)}
