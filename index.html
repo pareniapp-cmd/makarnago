@@ -80,7 +80,6 @@ canvas{flex:1;min-height:0;width:100%;display:block;touch-action:none}
 </style>
 </head>
 <body>
-<div id="splash"><div class="emoji">🍝</div><h1>MakarnaGo</h1><div class="spstudio">BMAC's</div></div>
 <div id="app">
 <div id="hud"><button id="menuBtn">☰</button><span id="at">Deneme 0</span><div id="bar"><i id="fill"></i><b id="bm"></b></div><span id="bs">En iyi %0</span></div>
 <div id="cb"><i id="cf"></i></div>
@@ -100,6 +99,14 @@ canvas{flex:1;min-height:0;width:100%;display:block;touch-action:none}
 <div class="modal" id="pk"><div class="mbox"><h3>Makarna Seç</h3><div id="pkg"></div><div class="mrow"><button class="sec mback">← Geri</button></div></div></div>
 <div class="modal" id="st"><div class="mbox"><h3>Ayarlar</h3><div id="stg"></div><div class="mrow"><button class="sec mback">← Geri</button></div></div></div>
 <script>
+(function(){
+var sp=document.createElement("div");
+sp.id="splash";
+sp.style.cssText="position:fixed;top:0;left:0;right:0;bottom:0;z-index:2147483647;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#0a2228;transition:opacity .45s ease;opacity:1;";
+sp.innerHTML='<div style="font-size:110px;line-height:1">🍝</div><h1 style="margin:0;font-size:40px;font-weight:900;color:#ffd23f;letter-spacing:-1px;font-family:inherit">MakarnaGo</h1><div style="font-size:12px;font-weight:700;color:#fff;opacity:.6;letter-spacing:.5px;margin-top:2px;font-family:inherit">BMAC\'s</div>';
+(document.body||document.documentElement).appendChild(sp);
+setTimeout(function(){sp.style.opacity="0";sp.style.pointerEvents="none";setTimeout(function(){if(sp.parentNode)sp.parentNode.removeChild(sp)},500)},1700);
+})();
 function $(s){return document.querySelector(s)}
 function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 var LANGS=["tr","en","es","pt","ru"],LNAME={tr:"Türkçe",en:"English",es:"Español",pt:"Português",ru:"Русский"},LANG="tr";
@@ -630,7 +637,6 @@ q("#shr",function(e){e.stopPropagation();openCard()});q("#rpl",function(e){e.sto
 cv.addEventListener("contextmenu",function(e){e.preventDefault()})})();
 window.addEventListener("resize",fit);
 fit();applyStatic();si=Math.max(0,Math.min(SHP.length-1,sv.sh|0));if(SHP[si].u&&!SHP[si].u())si=0;setChapter(sv.cc>=0&&sv.cc<CH.length&&(sv.cc>=NS||sv.cc<sv.u)&&!(sv.cc===NS+3&&(sv.dc||0)<100)?sv.cc:0);requestAnimationFrame(loop);
-setTimeout(function(){var sp=document.getElementById("splash");if(sp){sp.classList.add("hide");setTimeout(function(){sp.remove()},500)}},1700);
 </script>
 </body>
 </html>
