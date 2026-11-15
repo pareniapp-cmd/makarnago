@@ -32,7 +32,7 @@ workflows:
           $PB -c "Delete :CFBundleLocalizations" "$PLIST" 2>/dev/null || true
           $PB -c "Add :CFBundleLocalizations array" "$PLIST"
           i=0
-          for l in en tr es pt-BR ru; do
+          for l in en tr es pt-BR pt-PT ru; do
             $PB -c "Add :CFBundleLocalizations:$i string $l" "$PLIST"
             i=$((i+1))
           done
@@ -58,8 +58,8 @@ workflows:
           require 'xcodeproj'
           require 'fileutils'
           begin
-            names = { 'en' => 'Pasta Escape', 'tr' => 'Makarna Kaçış', 'es' => 'Fuga de Pasta', 'pt-BR' => 'Fuga da Massa', 'ru' => 'Побег макаронины' }
-            att = { 'en' => 'This identifier will be used to deliver personalized ads to you.', 'tr' => 'Bu kimlik, sana daha uygun reklamlar göstermek için kullanılır.', 'es' => 'Este identificador se usará para mostrarte anuncios personalizados.', 'pt-BR' => 'Este identificador será usado para exibir anúncios personalizados para você.', 'ru' => 'Этот идентификатор будет использоваться для показа персонализированной рекламы.' }
+            names = { 'en' => 'Pasta Escape', 'tr' => 'Makarna Kaçış', 'es' => 'Fuga de Pasta', 'pt-BR' => 'Fuga da Massa', 'pt-PT' => 'Fuga da Massa', 'ru' => 'Побег макаронины' }
+            att = { 'en' => 'This identifier will be used to deliver personalized ads to you.', 'tr' => 'Bu kimlik, sana daha uygun reklamlar göstermek için kullanılır.', 'es' => 'Este identificador se usará para mostrarte anuncios personalizados.', 'pt-BR' => 'Este identificador será usado para exibir anúncios personalizados para você.', 'pt-PT' => 'Este identificador será usado para apresentar anúncios personalizados.', 'ru' => 'Этот идентификатор будет использоваться для показа персонализированной рекламы.' }
             proj = Xcodeproj::Project.open('ios/App/App.xcodeproj')
             target = proj.targets.find { |t| t.name == 'App' }
             group = proj.main_group['App'] || proj.main_group.new_group('App', 'App')
