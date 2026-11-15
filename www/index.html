@@ -418,6 +418,15 @@ cv.addEventListener("pointerdown",function(e){
       e.preventDefault();unlock();if(mode==="run")setPause();else openM("#home");return
     }
   }
+  var ovIds=["rpl","shr","adr1","adr2"];
+  for(var oi=0;oi<ovIds.length;oi++){
+    var ov=document.getElementById(ovIds[oi]);
+    if(!ov||getComputedStyle(ov).display==="none")continue;
+    var orc=ov.getBoundingClientRect();
+    if(e.clientX>=orc.left-10&&e.clientX<=orc.right+10&&e.clientY>=orc.top-10&&e.clientY<=orc.bottom+10){
+      e.preventDefault();unlock();ov.click();return
+    }
+  }
   e.preventDefault();unlock();fset(e);press()
 });cv.addEventListener("touchstart",function(e){if(document.querySelector(".modal.on"))return;e.preventDefault()},{passive:false});cv.addEventListener("touchmove",function(e){if(document.querySelector(".modal.on"))return;e.preventDefault()},{passive:false});document.addEventListener("selectstart",function(e){if(!(e.target&&e.target.id==="cimg"))e.preventDefault()});document.addEventListener("gesturestart",function(e){e.preventDefault()});window.addEventListener("pointermove",function(e){if(hold)fset(e)});
 window.addEventListener("pointerup",function(){release();unlock()});document.addEventListener("click",function(e){try{if(e.target.closest&&e.target.closest("button"))tone("square",440,660,.05,.05)}catch(x){}});window.addEventListener("pointercancel",release);
