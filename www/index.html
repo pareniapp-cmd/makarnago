@@ -389,7 +389,10 @@ var b=shareInfo||{k:"die",v:0};g.save();g.translate(540,520);g.rotate(-.08);g.be
 if(b.k==="win"){T("YENDİM!",545,128,"#fff",16);T(b.v+". denemede",640,60,"#0b1620",1)}
 else if(b.k==="end"){T(String(b.v),545,220,"#fff",16);T("çatal geçtim",640,70,"#fff",12)}
 else{T("%"+b.v,540,220,"#fff",16);T("çorba oldum",640,76,"#fff",12)}
-if(b.k!=="win"){var fp=b.k==="end"?Math.round(100*(1-Math.exp(-b.v/22))):Math.round(100-100*Math.pow(1-b.v/100,1.8));fp=Math.max(40,Math.min(98,fp));T("Oyuncuların %"+fp+"'inden iyisin! 🔥",850,52,"#ffd23f",10)}
+if(b.k!=="win"){var fp=b.k==="end"?Math.round(100*(1-Math.exp(-b.v/22))):Math.round(100-100*Math.pow(1-b.v/100,1.8));fp=Math.max(40,Math.min(98,fp));
+var ftxt="Oyuncuların %"+fp+"'inden iyisin! 🔥";g.font="900 44px 'Avenir Next','Trebuchet MS',sans-serif";var ftw=g.measureText(ftxt).width;if(ftw>940){g.font="900 "+Math.floor(44*940/ftw)+"px 'Avenir Next','Trebuchet MS',sans-serif";ftw=g.measureText(ftxt).width}
+var fbw=ftw+56,fbh=72,fbx=540-fbw/2,fby=795-fbh+18;g.save();g.globalAlpha=.92;g.fillStyle="#0b1620";g.beginPath();if(g.roundRect){g.roundRect(fbx,fby,fbw,fbh,fbh/2)}else{g.rect(fbx,fby,fbw,fbh)}g.fill();g.restore();
+T(ftxt,795,44,"#ffd23f",0)}
 drawPlate(g,si,b);T("Sen geçebilir misin?",1290,64,"#fff",12);
 try{c.toBlob(function(bl){done(bl,c.toDataURL("image/png"))},"image/png")}catch(e){done(null,"")}}
 function openCard(){buildCard(function(bl,url){cardBlob=bl;$("#cimg").src=url;$("#cm").classList.add("on")})}
